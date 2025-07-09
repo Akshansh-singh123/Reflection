@@ -11,7 +11,6 @@ repositories {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":feature"))
     implementation(kotlin("reflect"))
     testImplementation(kotlin("test"))
 }

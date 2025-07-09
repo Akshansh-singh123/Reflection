@@ -17,6 +17,13 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks.register<Jar>("featureJar") {
+    archiveBaseName.set("feature")
+    archiveVersion.set("")
+    from(sourceSets.main.get().output)
+}
+
 kotlin {
     jvmToolchain(21)
 }
