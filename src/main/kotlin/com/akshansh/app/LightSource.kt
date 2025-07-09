@@ -3,6 +3,9 @@ package com.akshansh.app
 import java.io.File
 import java.net.URLClassLoader
 import java.util.jar.JarFile
+import kotlin.reflect.full.createInstance
+import kotlin.reflect.full.declaredFunctions
+import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.hasAnnotation
 
 fun main(args: Array<String>) {
@@ -14,19 +17,23 @@ fun main(args: Array<String>) {
         Thread.currentThread().contextClassLoader
     )
 
-    val classNames = scanJarForClasses(baseDir, basePackage)
-    println(classNames)
-
-    for (className in classNames) {
+    for (className in scanJarForClasses(baseDir, basePackage)) {
         try {
             val clazz = classLoader.loadClass(className)
             val kClass = clazz.kotlin
 
             if (kClass.hasAnnotation<ReflectLight>()) {
-                println("Found annotated class: ${clazz.name}")
+                val instance = kClass.createInstance()
+                kClass.declaredFunctions
+                    .filter { it.findAnnotation<ReflectFunctionImage>() != null }
+                    .forEach { function ->
+                        println("Found annotated function: ${function.name}")
+                        val result = function.call(instance)
+                        println("Invoked ${function.name}, returned: $result")
+                    }
             }
         } catch (e: Throwable) {
-            println("Failed to load class $className: ${e.message}")
+            println("Exception $className: ${e.message}")
         }
     }
 }
