@@ -2,13 +2,12 @@ package com.akshansh.app
 
 
 @ReflectLight
-class FeatureA {
+class ProtoProvider {
     @ReflectFunctionImage
-    fun getFeature(): String {
-        return "Reflected feature"
+    fun getSendLoginEventProto(name: String?, phone: String?): UserDetails {
+        return UserDetails(name, phone)
     }
 
-    @ReflectFunctionImage
     fun getAnotherFeature(): String {
         return "Reflected another feature"
     }

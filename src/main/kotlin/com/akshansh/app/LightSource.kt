@@ -27,8 +27,9 @@ fun main(args: Array<String>) {
                 kClass.declaredFunctions
                     .filter { it.findAnnotation<ReflectFunctionImage>() != null }
                     .forEach { function ->
+                        println(function.parameters.map { it.kind.name })
                         println("Found annotated function: ${function.name}")
-                        val result = function.call(instance)
+                        val result = function.call(instance, "Akshansh", "8219048321")
                         println("Invoked ${function.name}, returned: $result")
                     }
             }
