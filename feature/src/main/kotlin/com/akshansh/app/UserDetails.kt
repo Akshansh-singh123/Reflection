@@ -3,7 +3,7 @@ package com.akshansh.app
 data class UserDetails(
     val name: String?,
     val phone: String?,
-    val token: Token? = null
+    val token: Token?
 )
 
 data class Token(

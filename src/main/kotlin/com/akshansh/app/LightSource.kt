@@ -36,7 +36,6 @@ fun main(args: Array<String>) {
                                 else -> null
                             }
                         }
-                        println("Found annotated function: ${function.name}")
                         val result = function.call(*functionArgs.toTypedArray())
                         println("Invoked ${function.name}, returned: $result")
                     }
@@ -70,7 +69,7 @@ fun mockValueForType(type: KClass<*>): Any? {
     }
 
     return runCatching { constructor.callBy(args) }.getOrElse {
-        println("⚠️ Failed to create instance of ${type.simpleName}: ${it.message}")
+        println("Failed to create instance of ${type.simpleName}: ${it.message}")
         null
     }
 }
