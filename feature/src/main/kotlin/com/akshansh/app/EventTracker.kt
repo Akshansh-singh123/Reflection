@@ -2,7 +2,7 @@ package com.akshansh.app
 
 class EventTracker(private val protoProvider: ProtoProvider) {
     fun trackLoginEvent(userDetails: UserDetails) {
-        trackEvent(protoProvider.getSendLoginEventProto(userDetails.name, userDetails.phone))
+        trackEvent(protoProvider.getSendLoginEventProto(userDetails))
     }
 
     private fun trackEvent(message: Any) {

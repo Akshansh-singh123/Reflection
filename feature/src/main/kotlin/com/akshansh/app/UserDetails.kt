@@ -1,7 +1,12 @@
 package com.akshansh.app
 
 data class UserDetails(
-    val name: String? = null,
-    val phone: String? = null,
-    val token: String? = null
+    val name: String?,
+    val phone: String?,
+    val token: Token? = null
+)
+
+data class Token(
+    val value: String,
+    val expiryTime: Long
 )

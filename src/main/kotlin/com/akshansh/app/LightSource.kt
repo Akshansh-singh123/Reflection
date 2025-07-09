@@ -3,10 +3,9 @@ package com.akshansh.app
 import java.io.File
 import java.net.URLClassLoader
 import java.util.jar.JarFile
-import kotlin.reflect.full.createInstance
-import kotlin.reflect.full.declaredFunctions
-import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.hasAnnotation
+import kotlin.reflect.KClass
+import kotlin.reflect.KParameter
+import kotlin.reflect.full.*
 
 fun main(args: Array<String>) {
     val baseDir = File("/Users/akshansh/IdeaProjects/ReflectionGeneration/feature/build/libs/feature.jar")
@@ -27,9 +26,18 @@ fun main(args: Array<String>) {
                 kClass.declaredFunctions
                     .filter { it.findAnnotation<ReflectFunctionImage>() != null }
                     .forEach { function ->
-                        println(function.parameters.map { it.kind.name })
+                        val functionArgs = function.parameters.map { param ->
+                            when (param.kind) {
+                                KParameter.Kind.INSTANCE -> instance
+                                KParameter.Kind.VALUE -> mockValueForType(
+                                    param.type.classifier as? KClass<*> ?: Any::class
+                                )
+
+                                else -> null
+                            }
+                        }
                         println("Found annotated function: ${function.name}")
-                        val result = function.call(instance, "Akshansh", "8219048321")
+                        val result = function.call(*functionArgs.toTypedArray())
                         println("Invoked ${function.name}, returned: $result")
                     }
             }
@@ -47,4 +55,35 @@ fun scanJarForClasses(jarFile: File, packagePrefix: String): List<String> {
         .map { it.name.replace('/', '.').removeSuffix(".class") }
         .filter { it.startsWith(packagePrefix) } // filter only your package
         .toList()
+}
+
+fun mockValueForType(type: KClass<*>): Any? {
+    mockPrimitive(type)?.let { return it }
+
+    runCatching { return type.createInstance() }
+
+    val constructor = type.primaryConstructor ?: return null
+
+    val args: Map<KParameter, Any?> = constructor.parameters.associateWith { param ->
+        val paramType = param.type.classifier as? KClass<*> ?: Any::class
+        mockValueForType(paramType)
+    }
+
+    return runCatching { constructor.callBy(args) }.getOrElse {
+        println("⚠️ Failed to create instance of ${type.simpleName}: ${it.message}")
+        null
+    }
+}
+
+fun mockPrimitive(type: KClass<*>): Any? = when (type) {
+    String::class -> "mock"
+    Int::class -> 0
+    Long::class -> 0L
+    Double::class -> 0.0
+    Float::class -> 0f
+    Boolean::class -> false
+    List::class -> emptyList<Any>()
+    Set::class -> emptySet<Any>()
+    Map::class -> emptyMap<Any, Any>()
+    else -> null
 }
