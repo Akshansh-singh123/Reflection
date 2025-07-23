@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.9.23"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "org.example"
@@ -20,4 +21,17 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(21)
+}
+
+tasks {
+    shadowJar {
+        manifest {
+            attributes(
+                "Main-Class" to "com.akshansh.app.LightSourceKt"
+            )
+        }
+        archiveBaseName.set("reflect-gen")
+        archiveClassifier.set("")
+        archiveVersion.set("")
+    }
 }
