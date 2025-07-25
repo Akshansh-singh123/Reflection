@@ -8,7 +8,7 @@ import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.model.*
 import java.io.File
 
-const val CREDENTIAL_FILE_PATH = "./playground-5c299-bc174ed590ca.json"
+const val CREDENTIAL_FILE_PATH = "./credentials.json"
 const val GOOGLE_SHEETS_ENDPOINT = "https://www.googleapis.com/auth/spreadsheets"
 
 const val APP_NAME = "Event Details"
