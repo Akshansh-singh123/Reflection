@@ -1,8 +1,12 @@
 package com.akshansh.app
 
-class EventTracker(private val protoProvider: ProtoProvider) {
+class APlusDailyRewardAnalytics(private val protoProvider: ProtoProvider) {
     fun trackLoginEvent(userDetails: UserDetails) {
         trackEvent(protoProvider.getSendLoginEventProto(userDetails).message)
+    }
+
+    fun sendAuthSuccessEvent(source: String, miniAppId: String) {
+        trackEvent(protoProvider.getSendAuthSuccessEventProto(source, miniAppId))
     }
 
     private fun trackEvent(message: Any) {

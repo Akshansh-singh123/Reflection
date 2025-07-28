@@ -29,6 +29,19 @@ class ProtoProvider {
     fun getFeatureNotAnnotated(): String {
         return "Not annotated"
     }
+
+    @ReflectFunctionImage
+    fun getSendAuthSuccessEventProto(source: String, miniAppId: String): ProtoWrapper {
+        return ProtoWrapper(
+            message = Component(
+                eventName = "Mini app auth success",
+                referrer = Referrer(source = source),
+                componentDetail = ComponentDetail(name = miniAppId),
+                detail = miniAppId
+            ),
+            descriptionMap = mapOf("component.detail" to "This is the mini App ID")
+        )
+    }
 }
 
 data class ProtoWrapper(
