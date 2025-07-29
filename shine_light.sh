@@ -55,4 +55,4 @@ if [[ ! -f "$JAR_PATH" ]]; then
 fi
 
 echo "Running $JAR_PATH..."
-java -jar "$JAR_PATH"
+java -jar "$JAR_PATH" "$MODULE_NAME"

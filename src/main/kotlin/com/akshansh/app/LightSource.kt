@@ -3,8 +3,10 @@ package com.akshansh.app
 import java.io.File
 
 fun main(args: Array<String>) {
-    val baseDir = File("./feature/build/libs/feature.jar")
+    args.getOrNull(0)?.let { module ->
+        val baseDir = File("./${module}/build/libs/${module}.jar")
 
-    val viewer = Viewer()
-    viewer.view(baseDir = baseDir)
+        val viewer = Viewer()
+        viewer.view(baseDir = baseDir)
+    }
 }
